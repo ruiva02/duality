@@ -3,14 +3,39 @@
     <div class="absolute w-16 vertical-align-sidenav">
       <div class="bg-gray-transparent-60 text-white py-4 rounded-r-xl w-full">
         <img class="ml-5 py-3 w-8 menu-icon" src="/icons/browser.svg" alt="browser">
-        <img class="ml-5 py-3 w-8 menu-icon" src="/icons/noticias.svg" alt="noticias">
-        <img class="ml-5 py-3 w-8 menu-icon" src="/icons/fotos.svg" alt="fotos">
-        <img class="ml-5 py-3 w-8 menu-icon" src="/icons/reciclagem.svg" alt="reciclagem">
-        <img class="ml-5 py-3 w-8 menu-icon" src="/icons/email.svg" alt="email">
+        <img @click="systemWindow = true" class="ml-5 py-3 w-8 menu-icon" src="/icons/noticias.svg" alt="noticias">
+        <img @click="systemWindow = true" class="ml-5 py-3 w-8 menu-icon" src="/icons/fotos.svg" alt="fotos">
+        <img @click="systemWindow = true" class="ml-5 py-3 w-8 menu-icon" src="/icons/reciclagem.svg" alt="reciclagem">
+        <img @click="systemWindow = true" class="ml-5 py-3 w-8 menu-icon" src="/icons/email.svg" alt="email">
         <img class="ml-5 py-3 w-8 menu-icon" src="/icons/chamadas.svg" alt="chamadas">
         <img class="ml-5 py-3 w-8 menu-icon" src="/icons/settings.svg" alt="settings">
       </div>
     </div>
+    <transition name="slide-fade">
+      <div v-if="systemWindow" class="system-window rounded-lg">
+        <div class="h-8 bg-gray-900 w-full p-2 rounded-t-lg">
+          <div class="font-bold h-4 w-4 text-xs text-yellow-500 bg-yellow-500 hover:text-black cursor-pointer rounded-full text-center float-right" @click="systemWindow = false">
+            X
+          </div>
+        </div>
+      </div>
+    </transition>
+    <transition name="slide-fade">
+      <div v-if="videoWindow" class="video-window rounded-lg">
+        <div class="h-8 bg-gray-900 w-full p-2 rounded-t-lg">
+          <div class="font-bold h-4 w-4 text-xs text-yellow-500 bg-yellow-500 hover:text-black cursor-pointer rounded-full text-center float-right" @click="videoWindow = false">
+            X
+          </div>
+        </div>
+        <div class="w-full h-full">
+          <video width="100%" autoplay>
+            <source src="/video/placeholder.mp4" type="video/mp4">
+            <!-- <source src="movie.ogg" type="video/ogg"> legendas -->
+          Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </transition>
     <transition name="cloud-fade">
       <div v-if="cloud" class="cloud">
         <div class="absolute h-6 w-6 mt-5 ml-4 bg-yellow-500 rounded-full">
@@ -30,10 +55,25 @@
         </div>
       </div>
     </transition>
-    <div v-if="day == 2 && month == 2 && year == 2002" class="relative w-6/12 py-48 h-full mx-auto">
-      <div class="w-8/12 float-right bg-gray-transparent-50 h-full">
-        a
+    <transition name="slide-fade">
+      <div v-if="day == 2 && month == 2 && year == 2002" class="absolute w-6/12 py-20 ml-64 h-full mx-auto">
+        <div class="w-7/12 float-right h-full mr-3">
+          <div class="w-full min-h-full date-folder pt-12 pl-10" @click.prevent="resetDate">
+            <div class="w-6/12">
+              <div @click="videoWindow = true" class="video-file inline-block cursor-pointer" />
+              <div class="image-file inline-block" />
+              <div @click="videoWindow = true" class="video-file inline-block cursor-pointer" />
+              <div class="audio-file inline-block" />
+              <div class="doc-file inline-block" />
+              <div class="image-file inline-block" />
+              <div class="id-file inline-block" />
+            </div>
+          </div>
+        </div>
       </div>
+    </transition>
+    <div class="absolute w-32 h-32 mt-12 mr-56 right-0 postit text-left pt-10 pl-10 pr-5 text-xxs">
+      19/09- entregar os papéis assinados da custódia partilhada.
     </div>
     <div class="absolute text-white w-24 h-40 right-0 vertical-align-absolute">
       <div class="bg-gray-transparent-80 pl-2 py-6 h-full w-full rounded-l-full">
@@ -72,6 +112,8 @@
 export default {
   data () {
     return {
+      systemWindow: false,
+      videoWindow: false,
       searching: false,
       folder: false,
       day: 1,
@@ -115,6 +157,11 @@ export default {
       if (this.year > 1980) {
         this.year = this.year - 1
       }
+    },
+    resetDate () {
+      this.day = 1
+      this.month = 1
+      this.year = 2000
     }
   }
 }
@@ -196,5 +243,65 @@ export default {
 .news-text {
     font-size: 0.35rem;
     line-height: 0.4rem;
+}
+.date-folder {
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 1rem;
+}
+
+.video-file, .image-file,
+.doc-file, .audio-file {
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid white;
+  margin-bottom: 1rem;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 1.5rem;
+  background-color: #222;
+  border-radius: 0.5rem;
+}
+
+.video-file {
+  background-image: url('/icons/play.svg');
+}
+.image-file {
+  background-image: url('/icons/image.svg');
+}
+.id-file {
+  width: 100%;
+  background-color: #222;
+  border-radius: 0.5rem;
+  height: 5rem;
+}
+.doc-file {
+  background-image: url('/icons/doc.svg');
+}
+.audio-file {
+  background-image: url('/icons/sound-file.svg');
+}
+.system-window {
+  width: 25%;
+  height: 60%;
+  background-color: rgba(255, 255, 255, 0.4);
+  margin: 9% 0% 0% 10%;
+  position: absolute;
+  z-index: 10;
+  content: ' '
+}
+.video-window {
+  width: 50%;
+  height: 50%;
+  background-color: rgba(0, 0, 0, 0.7);
+  margin: 5% 0% 0% 20%;
+  position: absolute;
+  z-index: 10;
+  content: ' '
+}
+.system-window:hover, .video-window:hover  {
+  content: 'x'
+}
+.postit {
+  background-image: url('/icons/postit.svg')
 }
 </style>

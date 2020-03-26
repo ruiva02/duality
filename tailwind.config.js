@@ -28,6 +28,9 @@ module.exports = {
           'transparent-80': 'rgba(20, 20, 20, 0.8)',
           'transparent-90': 'rgba(20, 20, 20, 0.9)'
         }
+      },
+      fontSize: {
+        xxs: '0.5rem'
       }
     }
   },

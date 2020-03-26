@@ -57,6 +57,7 @@ export default {
     setTimeout(() => { this.bateria = '/icons/bateria-3pau.svg' }, 2500)
     setTimeout(() => { this.bateria = '/icons/bateria-2pau.svg' }, 5000)
     setTimeout(() => { this.bateria = '/icons/bateria-1pau.svg' }, 7500)
+    setTimeout(() => { this.bateria = '/icons/bateria-morta.svg' }, 10000)
     // absolute black div saying game over or route.push to main menu
   },
   methods: {
