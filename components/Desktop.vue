@@ -2,13 +2,13 @@
   <div>
     <div class="absolute w-16 vertical-align-sidenav z-10">
       <div class="bg-gray-transparent-60 text-white py-4 rounded-r-xl w-full">
-        <img class="ml-5 py-3 w-8 menu-icon" src="/icons/browser.svg" alt="browser">
-        <img @click="systemWindow = true, window = ''" class="ml-5 py-3 w-8 menu-icon" src="/icons/noticias.svg" alt="noticias">
-        <img @click="systemWindow = true, window = ''" class="ml-5 py-3 w-8 menu-icon" src="/icons/fotos.svg" alt="fotos">
+        <img class="ml-5 py-3 w-8 menu-icon" src="/icones/browser.svg" alt="browser">
+        <img @click="systemWindow = true, window = ''" class="ml-5 py-3 w-8 menu-icon" src="/icones/noticias.svg" alt="noticias">
+        <img @click="systemWindow = true, window = ''" class="ml-5 py-3 w-8 menu-icon" src="/icones/fotos.svg" alt="fotos">
         <img @click="systemWindow = true, window = ''" class="ml-5 py-3 w-8 menu-icon" :src="reciclagem" alt="reciclagem">
         <img @click="systemWindow = true, window = ''" class="ml-5 py-3 w-8 menu-icon" :src="mail" alt="email">
         <img @click.prevent="skypeController" class="ml-5 py-3 w-8 menu-icon" :src="chamadas" alt="chamadas">
-        <img class="ml-5 py-3 w-8 menu-icon" src="/icons/settings.svg" alt="settings">
+        <img class="ml-5 py-3 w-8 menu-icon" src="/icones/settings.svg" alt="settings">
       </div>
     </div>
     <div class="calendario" />
@@ -23,27 +23,27 @@
           <div class="bg-white h-full w-56 text-gray-200 rounded-bl-lg p-2 pt-4">
             <div class="text-xs font-bold text-black">Contactos</div>
             <div class="mt-8 rounded-full pb-2 transition-all duration-500">
-              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icons/joana.svg');"></div>
+              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icones/joana.svg');"></div>
               Joana Lima
               <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1"></div>
             </div>
-            <div @click="skypeVideo = 'background-image: url(' + '/icons/giphy.gif' + ')'" class="my-4 hover:shadow-xl hover:bg-yellow-400 rounded-full pb-2 transition-all duration-500 cursor-pointer">
-              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icons/pj-icon.svg');"></div>
+            <div @click="skypeVideo = 'background-image: url(' + '/icones/giphy.gif' + ')'" class="my-4 hover:shadow-xl hover:bg-yellow-400 rounded-full pb-2 transition-all duration-500 cursor-pointer">
+              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icones/pj-icon.svg');"></div>
               <span class="text-black font-semibold">Polícia Judiciária</span>
               <div class="inline-block w-1 h-1 rounded-full bg-green-600 ml-1"></div>
             </div>
             <div class="my-4 rounded-full pb-2">
-              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icons/rodrigo.svg');"></div>
+              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icones/rodrigo.svg');"></div>
               Rodrigo Pereira
               <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1"></div>
             </div>
             <div class="my-4 rounded-full pb-2">
-              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icons/lurdes.svg');"></div>
+              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icones/lurdes.svg');"></div>
               Lurdes Pereira
               <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1"></div>
             </div>
             <div class="my-4 rounded-full pb-2">
-              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icons/paulo.svg');"></div>
+              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icones/paulo.svg');"></div>
               Paulo Carolino
               <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1"></div>
             </div>
@@ -51,11 +51,11 @@
           <div class="bg-gray-600 h-full w-full rounded-br-lg p-2 skype-video" :style="skypeVideo">
             <div v-if="unlocked">
                 <div class="w-full h-3 mt-3 px-3 flex flex-wrap justify-between">
-                <img src="/icons/back.svg" class="h-3" alt="back">
-                <img src="/icons/expand.svg" class="h-3" alt="expand">
+                <img src="/icones/back.svg" class="h-3" alt="back">
+                <img src="/icones/expand.svg" class="h-3" alt="expand">
               </div>
               <div class="w-48 h-5 bottom-0 absolute ml-10 mb-4">
-                <img src="/icons/skype-controls.svg" class="h-5 mx-auto" alt="controls">
+                <img src="/icones/skype-controls.svg" class="h-5 mx-auto" alt="controls">
               </div>
             </div>
             <div v-else>
@@ -84,7 +84,7 @@
     <transition name="cloud-fade">
       <div v-if="cloud" class="cloud">
         <div class="absolute h-6 w-6 mt-5 ml-4 bg-yellow-500 rounded-full">
-          <img src="/icons/alerta.svg" alt="alerta" class="h-6 w-6 mx-auto py-1">
+          <img src="/icones/alerta.svg" alt="alerta" class="h-6 w-6 mx-auto py-1">
         </div>
         <div class="pt-8 mt-2 px-10 mx-1 mb-2 w-full h-full">
           <div class="flex flex-wrap justify-between leading-4">
@@ -92,7 +92,7 @@
               <span>Noticias</span>
               <span class="text-yellow-500">JN</span>
             </span>
-            <img class="w-2 mr-2" src="/icons/fechar.svg" alt="fechar">
+            <img class="w-2 mr-2" src="/icones/fechar.svg" alt="fechar">
           </div>
           <p class="news-text">
             Despejo de moradora exalta ânimos na Ribeira.  A ordem de despejo de Joana Pacheco da casa na Ribeira onde mora com os dois filhos, de oito e 12 anos, foi executada esta sexta-feira de manhã.
@@ -125,7 +125,7 @@
     </div>
     <div class="absolute text-white w-24 h-40 right-0 vertical-align-absolute">
       <div class="bg-gray-transparent-80 pl-2 py-6 h-full w-full rounded-l-full">
-        <img class="menu-icon px-4 py-6" src="/icons/lupa.svg" alt="lupa" @click="searching = !searching">
+        <img class="menu-icon px-4 py-6" src="/icones/lupa.svg" alt="lupa" @click="searching = !searching">
         <transition name="slide-fade">
           <div v-if="searching" class="absolute flex w-56 calendar-container text-2xl">
             <div class="py-5 w-full">
@@ -168,10 +168,10 @@ export default {
       month: 1,
       year: 2000,
       cloud: false,
-      bateria: '/icons/bateria.svg',
-      chamadas: '/icons/chamadas-off.svg',
-      reciclagem: '/icons/reciclagem.svg',
-      mail: '/icons/email.svg',
+      bateria: '/icones/bateria.svg',
+      chamadas: '/icones/chamadas-off.svg',
+      reciclagem: '/icones/reciclagem.svg',
+      mail: '/icones/email.svg',
       window: '',
       unlocked: true,
       skypeVideo: "background-image: url('/images/placeholder-1.png')"
@@ -180,9 +180,9 @@ export default {
   mounted () {
     this.cloud = true
     setTimeout(() => { this.cloud = false }, 2500)
-    setTimeout(() => { this.chamadas = '/icons/chamadas.svg' }, 12000)
-    setTimeout(() => { this.reciclagem = '/icons/reciclagem-full.svg' }, 1200)
-    setTimeout(() => { this.mail = '/icons/email-open.svg' }, 2400)
+    setTimeout(() => { this.chamadas = '/icones/chamadas.svg' }, 12000)
+    setTimeout(() => { this.reciclagem = '/icones/reciclagem-full.svg' }, 1200)
+    setTimeout(() => { this.mail = '/icones/email-open.svg' }, 2400)
   },
   methods: {
     incrementDay () {
@@ -290,7 +290,7 @@ export default {
     border-top: 15px solid black;
 }
 .cloud {
-    background: url('/icons/nuvem.svg');
+    background: url('/icones/nuvem.svg');
     background-repeat: no-repeat;
     background-size: contain;
     height: 7rem;
@@ -309,7 +309,7 @@ export default {
   position: absolute;
   height: 8rem;
   width: 8rem;
-  background-image: url('/icons/calendario.svg');
+  background-image: url('/icones/calendario.svg');
   background-repeat: no-repeat;
   background-position: center center;
   left: 22rem;
@@ -348,10 +348,10 @@ export default {
 }
 
 .video-file {
-  background-image: url('/icons/play.svg');
+  background-image: url('/icones/play.svg');
 }
 .image-file {
-  background-image: url('/icons/image.svg');
+  background-image: url('/icones/image.svg');
 }
 .id-file {
   width: 100%;
@@ -360,10 +360,10 @@ export default {
   height: 5rem;
 }
 .doc-file {
-  background-image: url('/icons/doc.svg');
+  background-image: url('/icones/doc.svg');
 }
 .audio-file {
-  background-image: url('/icons/sound-file.svg');
+  background-image: url('/icones/sound-file.svg');
 }
 .system-window {
   width: 32%;
@@ -406,6 +406,6 @@ export default {
   content: 'x'
 }
 .postit {
-  background-image: url('/icons/postit.svg')
+  background-image: url('/icones/postit.svg')
 }
 </style>
