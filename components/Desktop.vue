@@ -1,16 +1,17 @@
 <template>
   <div>
-    <div class="absolute w-16 vertical-align-sidenav">
+    <div class="absolute w-16 vertical-align-sidenav z-10">
       <div class="bg-gray-transparent-60 text-white py-4 rounded-r-xl w-full">
         <img class="ml-5 py-3 w-8 menu-icon" src="/icons/browser.svg" alt="browser">
-        <img @click="systemWindow = true" class="ml-5 py-3 w-8 menu-icon" src="/icons/noticias.svg" alt="noticias">
-        <img @click="systemWindow = true" class="ml-5 py-3 w-8 menu-icon" src="/icons/fotos.svg" alt="fotos">
-        <img @click="systemWindow = true" class="ml-5 py-3 w-8 menu-icon" src="/icons/reciclagem.svg" alt="reciclagem">
-        <img @click="systemWindow = true" class="ml-5 py-3 w-8 menu-icon" src="/icons/email.svg" alt="email">
-        <img class="ml-5 py-3 w-8 menu-icon" src="/icons/chamadas.svg" alt="chamadas">
+        <img @click="systemWindow = true, window = ''" class="ml-5 py-3 w-8 menu-icon" src="/icons/noticias.svg" alt="noticias">
+        <img @click="systemWindow = true, window = ''" class="ml-5 py-3 w-8 menu-icon" src="/icons/fotos.svg" alt="fotos">
+        <img @click="systemWindow = true, window = ''" class="ml-5 py-3 w-8 menu-icon" :src="reciclagem" alt="reciclagem">
+        <img @click="systemWindow = true, window = ''" class="ml-5 py-3 w-8 menu-icon" :src="mail" alt="email">
+        <img @click.prevent="skypeController" class="ml-5 py-3 w-8 menu-icon" :src="chamadas" alt="chamadas">
         <img class="ml-5 py-3 w-8 menu-icon" src="/icons/settings.svg" alt="settings">
       </div>
     </div>
+    <div class="calendario" />
     <transition name="slide-fade">
       <div v-if="systemWindow" class="system-window rounded-lg">
         <div class="h-8 bg-gray-900 w-full p-2 rounded-t-lg">
@@ -18,12 +19,56 @@
             X
           </div>
         </div>
+        <div v-if="window === 'skype'" class="skype flex text-xxs">
+          <div class="bg-white h-full w-56 text-gray-200 rounded-bl-lg p-2 pt-4">
+            <div class="text-xs font-bold text-black">Contactos</div>
+            <div class="mt-8 rounded-full pb-2 transition-all duration-500">
+              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icons/joana.svg');"></div>
+              Joana Lima
+              <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1"></div>
+            </div>
+            <div @click="skypeVideo = 'background-image: url(' + '/icons/giphy.gif' + ')'" class="my-4 hover:shadow-xl hover:bg-yellow-400 rounded-full pb-2 transition-all duration-500 cursor-pointer">
+              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icons/pj-icon.svg');"></div>
+              <span class="text-black font-semibold">Polícia Judiciária</span>
+              <div class="inline-block w-1 h-1 rounded-full bg-green-600 ml-1"></div>
+            </div>
+            <div class="my-4 rounded-full pb-2">
+              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icons/rodrigo.svg');"></div>
+              Rodrigo Pereira
+              <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1"></div>
+            </div>
+            <div class="my-4 rounded-full pb-2">
+              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icons/lurdes.svg');"></div>
+              Lurdes Pereira
+              <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1"></div>
+            </div>
+            <div class="my-4 rounded-full pb-2">
+              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icons/paulo.svg');"></div>
+              Paulo Carolino
+              <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1"></div>
+            </div>
+          </div>
+          <div class="bg-gray-600 h-full w-full rounded-br-lg p-2 skype-video" :style="skypeVideo">
+            <div v-if="unlocked">
+                <div class="w-full h-3 mt-3 px-3 flex flex-wrap justify-between">
+                <img src="/icons/back.svg" class="h-3" alt="back">
+                <img src="/icons/expand.svg" class="h-3" alt="expand">
+              </div>
+              <div class="w-48 h-5 bottom-0 absolute ml-10 mb-4">
+                <img src="/icons/skype-controls.svg" class="h-5 mx-auto" alt="controls">
+              </div>
+            </div>
+            <div v-else>
+              locked.
+            </div>
+          </div>
+        </div>
       </div>
     </transition>
     <transition name="slide-fade">
       <div v-if="videoWindow" class="video-window rounded-lg">
         <div class="h-8 bg-gray-900 w-full p-2 rounded-t-lg">
-          <div class="font-bold h-4 w-4 text-xs text-yellow-500 bg-yellow-500 hover:text-black cursor-pointer rounded-full text-center float-right" @click="videoWindow = false">
+          <div class="font-bold h-4 w-4 text-xs text-yellow-500 bg-yellow-500 hover:text-black cursor-pointer rounded-full text-center float-right" @click.prevent="videoWindow = false">
             X
           </div>
         </div>
@@ -56,9 +101,12 @@
       </div>
     </transition>
     <transition name="slide-fade">
-      <div v-if="day == 2 && month == 2 && year == 2002" class="absolute w-6/12 py-20 ml-64 h-full mx-auto">
-        <div class="w-7/12 float-right h-full mr-3">
-          <div class="w-full min-h-full date-folder pt-12 pl-10" @click.prevent="resetDate">
+      <div v-if="day == 2 && month == 2 && year == 2002" class="absolute py-20 h-full w-full">
+        <div class="folder">
+          <div class="font-bold mr-4 mt-4 h-5 w-5 text-white bg-white hover:text-black cursor-pointer rounded-full text-center float-right" @click="resetDate">
+            X
+          </div>
+          <div class="w-full min-h-full date-folder pt-12 pl-10">
             <div class="w-6/12">
               <div @click="videoWindow = true" class="video-file inline-block cursor-pointer" />
               <div class="image-file inline-block" />
@@ -120,12 +168,21 @@ export default {
       month: 1,
       year: 2000,
       cloud: false,
-      bateria: '/icons/bateria.svg'
+      bateria: '/icons/bateria.svg',
+      chamadas: '/icons/chamadas-off.svg',
+      reciclagem: '/icons/reciclagem.svg',
+      mail: '/icons/email.svg',
+      window: '',
+      unlocked: true,
+      skypeVideo: "background-image: url('/images/placeholder-1.png')"
     }
   },
   mounted () {
     this.cloud = true
     setTimeout(() => { this.cloud = false }, 2500)
+    setTimeout(() => { this.chamadas = '/icons/chamadas.svg' }, 12000)
+    setTimeout(() => { this.reciclagem = '/icons/reciclagem-full.svg' }, 1200)
+    setTimeout(() => { this.mail = '/icons/email-open.svg' }, 2400)
   },
   methods: {
     incrementDay () {
@@ -162,6 +219,10 @@ export default {
       this.day = 1
       this.month = 1
       this.year = 2000
+    },
+    skypeController () {
+      this.window = 'skype'
+      this.systemWindow = true
     }
   }
 }
@@ -244,6 +305,30 @@ export default {
     font-size: 0.35rem;
     line-height: 0.4rem;
 }
+.calendario {
+  position: absolute;
+  height: 8rem;
+  width: 8rem;
+  background-image: url('/icons/calendario.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  left: 22rem;
+  top: 22rem;
+}
+.folder {
+  width: 25rem;
+  height: 28rem;
+  float: right;
+  margin-right: 25rem;
+}
+@media screen and (min-height: 930px) {
+  .folder {
+    width: 29rem;
+    height: 37rem;
+    margin-right: 32rem;
+  }
+}
+
 .date-folder {
     background-color: rgba(255, 255, 255, 0.4);
     border-radius: 1rem;
@@ -281,14 +366,33 @@ export default {
   background-image: url('/icons/sound-file.svg');
 }
 .system-window {
-  width: 25%;
+  width: 32%;
   height: 60%;
   background-color: rgba(255, 255, 255, 0.4);
-  margin: 9% 0% 0% 10%;
+  margin: 9% 0% 0% 7%;
   position: absolute;
   z-index: 10;
   content: ' '
 }
+@media screen and (min-height: 930px) {
+  .system-window {
+    height: 25rem;
+    margin: 16rem 0 0 15rem;
+  }
+}
+.skype {
+  height: 95%;
+}
+.skype-user {
+  margin-bottom: -0.75rem;
+  background-repeat: no-repeat;
+}
+.skype-video {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+}
+
 .video-window {
   width: 50%;
   height: 50%;
