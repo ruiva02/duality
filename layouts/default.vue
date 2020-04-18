@@ -5,7 +5,13 @@
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/css?family=Comfortaa&display=swap');
+@font-face {
+  font-family: 'Comfortaa';
+  font-style: normal;
+  font-display: swap;
+  src: url('/font/Comfortaa.ttf');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
 html {
   font-family: 'Comfortaa';
   font-size: 16px;

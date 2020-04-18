@@ -3,11 +3,11 @@
     <div class="absolute w-16 vertical-align-sidenav z-10">
       <div class="bg-gray-transparent-60 text-white py-4 rounded-r-xl w-full">
         <img class="ml-5 py-3 w-8 menu-icon" src="/icones/browser.svg" alt="browser">
-        <img @click="systemWindow = true, window = ''" class="ml-5 py-3 w-8 menu-icon" src="/icones/noticias.svg" alt="noticias">
-        <img @click="systemWindow = true, window = ''" class="ml-5 py-3 w-8 menu-icon" src="/icones/fotos.svg" alt="fotos">
-        <img @click="systemWindow = true, window = ''" class="ml-5 py-3 w-8 menu-icon" :src="reciclagem" alt="reciclagem">
-        <img @click="systemWindow = true, window = ''" class="ml-5 py-3 w-8 menu-icon" :src="mail" alt="email">
-        <img @click.prevent="skypeController" class="ml-5 py-3 w-8 menu-icon" :src="chamadas" alt="chamadas">
+        <img class="ml-5 py-3 w-8 menu-icon" src="/icones/noticias.svg" alt="noticias" @click="systemWindow = true, window = ''">
+        <img class="ml-5 py-3 w-8 menu-icon" src="/icones/fotos.svg" alt="fotos" @click="systemWindow = true, window = ''">
+        <img class="ml-5 py-3 w-8 menu-icon" :src="reciclagem" alt="reciclagem" @click="systemWindow = true, window = ''">
+        <img class="ml-5 py-3 w-8 menu-icon" :src="mail" alt="email" @click="systemWindow = true, window = ''">
+        <img class="ml-5 py-3 w-8 menu-icon" :src="chamadas" alt="chamadas" @click.prevent="skypeController">
         <img class="ml-5 py-3 w-8 menu-icon" src="/icones/settings.svg" alt="settings">
       </div>
     </div>
@@ -21,47 +21,57 @@
         </div>
         <div v-if="window === 'skype'" class="skype flex text-xxs">
           <div class="bg-white h-full w-56 text-gray-200 rounded-bl-lg p-2 pt-4">
-            <div class="text-xs font-bold text-black">Contactos</div>
+            <div class="text-xs font-bold text-black">
+              Contactos
+            </div>
             <div class="mt-8 rounded-full pb-2 transition-all duration-500">
-              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icones/joana.svg');"></div>
+              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icones/joana.svg');" />
               Joana Lima
-              <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1"></div>
+              <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1" />
             </div>
-            <div @click="skypeVideo = 'background-image: url(' + '/icones/giphy.gif' + ')'" class="my-4 hover:shadow-xl hover:bg-yellow-400 rounded-full pb-2 transition-all duration-500 cursor-pointer">
-              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icones/pj-icon.svg');"></div>
+            <div class="my-4 hover:shadow-xl hover:bg-yellow-400 rounded-full pb-2 transition-all duration-500 cursor-pointer" @click="skypeContactController">
+              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icones/pj-icon.svg');" />
               <span class="text-black font-semibold">Polícia Judiciária</span>
-              <div class="inline-block w-1 h-1 rounded-full bg-green-600 ml-1"></div>
+              <div class="inline-block w-1 h-1 rounded-full bg-green-600 ml-1" />
             </div>
             <div class="my-4 rounded-full pb-2">
-              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icones/rodrigo.svg');"></div>
+              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icones/rodrigo.svg');" />
               Rodrigo Pereira
-              <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1"></div>
+              <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1" />
             </div>
             <div class="my-4 rounded-full pb-2">
-              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icones/lurdes.svg');"></div>
+              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icones/lurdes.svg');" />
               Lurdes Pereira
-              <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1"></div>
+              <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1" />
             </div>
             <div class="my-4 rounded-full pb-2">
-              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icones/paulo.svg');"></div>
+              <div class="inline-block h-8 w-8 rounded-full skype-user" style="background-image: url('/icones/paulo.svg');" />
               Paulo Carolino
-              <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1"></div>
+              <div class="inline-block w-1 h-1 rounded-full bg-gray-200 ml-1" />
             </div>
           </div>
-          <div class="bg-gray-600 h-full w-full rounded-br-lg p-2 skype-video" :style="skypeVideo">
-            <div v-if="unlocked">
-                <div class="w-full h-3 mt-3 px-3 flex flex-wrap justify-between">
-                <img src="/icones/back.svg" class="h-3" alt="back">
+          <div v-if="unlocked && contacting" class="bg-gray-600 h-full w-full rounded-br-lg p-2 skype-video" :style="skypeVideo">
+            <div>
+              <div class="w-full h-3 mt-3 px-3 flex flex-wrap justify-between">
+                <img src="/icones/back.svg" class="h-3 cursor-pointer" alt="back" @click="contacting = false">
                 <img src="/icones/expand.svg" class="h-3" alt="expand">
               </div>
-              <div class="w-48 h-5 bottom-0 absolute ml-10 mb-4">
-                <img src="/icones/skype-controls.svg" class="h-5 mx-auto" alt="controls">
+              <div class="h-8 bottom-0 absolute ml-10 mb-4 w-full pr-64">
+                <img src="/icones/skype-controls.svg" class="h-8 mx-auto" alt="controls">
               </div>
             </div>
-            <div v-else>
-              locked.
+          </div>
+          <div v-else-if="unlocked === false && contacting === true" class="bg-gray-600 h-full w-full rounded-br-lg p-2">
+            <div class="flex">
+              <div class="mx-auto pt-40">
+                <p class="text-white">
+                  Como medida de segurança, confirme o nº deste contacto
+                </p>
+                <input v-model="lockNumber" class="text-lg ml-4 mt-3" type="tel" placeholder="exemplo: 913331123">
+              </div>
             </div>
           </div>
+          <div v-else class="bg-gray-600 h-full w-full rounded-br-lg p-2 skype-video" style="background-image: url('/images/placeholder-1.png')" />
         </div>
       </div>
     </transition>
@@ -76,7 +86,7 @@
           <video width="100%" autoplay>
             <source src="/video/placeholder.mp4" type="video/mp4">
             <!-- <source src="movie.ogg" type="video/ogg"> legendas -->
-          Your browser does not support the video tag.
+            Your browser does not support the video tag.
           </video>
         </div>
       </div>
@@ -108,9 +118,9 @@
           </div>
           <div class="w-full min-h-full date-folder pt-12 pl-10">
             <div class="w-6/12">
-              <div @click="videoWindow = true" class="video-file inline-block cursor-pointer" />
+              <div class="video-file inline-block cursor-pointer" @click="videoWindow = true" />
               <div class="image-file inline-block" />
-              <div @click="videoWindow = true" class="video-file inline-block cursor-pointer" />
+              <div class="video-file inline-block cursor-pointer" @click="videoWindow = true" />
               <div class="audio-file inline-block" />
               <div class="doc-file inline-block" />
               <div class="image-file inline-block" />
@@ -168,13 +178,24 @@ export default {
       month: 1,
       year: 2000,
       cloud: false,
+      lockNumber: null,
       bateria: '/icones/bateria.svg',
       chamadas: '/icones/chamadas-off.svg',
       reciclagem: '/icones/reciclagem.svg',
       mail: '/icones/email.svg',
       window: '',
-      unlocked: true,
+      unlocked: false,
+      contacting: false,
       skypeVideo: "background-image: url('/images/placeholder-1.png')"
+    }
+  },
+  watch: {
+    lockNumber () {
+      if (this.lockNumber === '913331123') {
+        this.unlocked = true
+      } else {
+        this.unlocked = false
+      }
     }
   },
   mounted () {
@@ -223,6 +244,10 @@ export default {
     skypeController () {
       this.window = 'skype'
       this.systemWindow = true
+    },
+    skypeContactController () {
+      this.skypeVideo = 'background-image: url(' + '/icones/giphy.gif' + ')'
+      this.contacting = true
     }
   }
 }
