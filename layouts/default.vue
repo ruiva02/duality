@@ -6,14 +6,19 @@
 
 <style>
 @font-face {
-  font-family: 'Comfortaa';
+  font-family: "NeueMontreal";
+  src: url("/fontes/montreal-regular.ttf") format("truetype");
+  font-weight: normal;
   font-style: normal;
-  font-display: swap;
-  src: url('/font/Comfortaa.ttf');
-  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: "NeueMontreal";
+  src: url("/fontes/montreal-bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
 }
 html {
-  font-family: 'Comfortaa';
+  font-family: 'NeueMontreal';
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
