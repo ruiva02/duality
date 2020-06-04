@@ -76,18 +76,24 @@
       </div>
     </transition>
     <transition name="slide-fade">
-      <div v-if="videoWindow" class="video-window rounded-lg">
+      <div v-if="mediaWindow !== 'undefined'" class="video-window rounded-lg pb-8">
         <div class="h-8 bg-gray-900 w-full p-2 rounded-t-lg">
-          <div class="font-bold h-4 w-4 text-xs text-yellow-500 bg-yellow-500 hover:text-black cursor-pointer rounded-full text-center float-right" @click.prevent="videoWindow = false">
+          <div class="font-bold h-4 w-4 text-xs text-yellow-500 bg-yellow-500 hover:text-black cursor-pointer rounded-full text-center float-right" @click.prevent="mediaWindow = 'undefined'">
             X
           </div>
         </div>
-        <div class="w-full h-full">
-          <video width="100%" autoplay>
-            <source src="/video/placeholder.mp4" type="video/mp4">
-            <!-- <source src="movie.ogg" type="video/ogg"> legendas -->
-            Your browser does not support the video tag.
-          </video>
+        <div v-if="mediaWindow.type === 'video'" class="w-full h-full">
+          <iframe
+            width="100%"
+            height="100%"
+            :src="mediaWindow.url"
+            frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          />
+        </div>
+        <div v-if="mediaWindow.type === 'image'" class="w-full h-full">
+          <img class="mx-auto h-full" :src="mediaWindow.url">
         </div>
       </div>
     </transition>
@@ -111,20 +117,16 @@
       </div>
     </transition>
     <transition name="slide-fade">
-      <div v-if="day == 2 && month == 2 && year == 2002" class="absolute py-20 h-full w-full">
+      <div v-if="day == 28 && month == 5 && year == 2019" class="absolute py-20 h-full w-full">
         <div class="folder">
           <div class="font-bold mr-4 mt-4 h-5 w-5 text-white bg-white hover:text-black cursor-pointer rounded-full text-center float-right" @click="resetDate">
             X
           </div>
           <div class="w-full min-h-full date-folder pt-12 pl-10">
-            <div class="w-6/12">
-              <div class="video-file inline-block cursor-pointer" @click="videoWindow = true" />
-              <div class="image-file inline-block" />
-              <div class="video-file inline-block cursor-pointer" @click="videoWindow = true" />
-              <div class="audio-file inline-block" />
-              <div class="doc-file inline-block" />
-              <div class="image-file inline-block" />
-              <div class="id-file inline-block" />
+            <div class="w-8/12">
+              <div class="inline-block px-2" v-for="(item, key) in media" :key="key">
+                <div class="inline-block cursor-pointer image-file" v-if="item.type === 'image'" @click="mediaWindow = item" />
+              </div>
             </div>
           </div>
         </div>
@@ -170,13 +172,14 @@
 export default {
   data () {
     return {
+      media: {},
       systemWindow: false,
-      videoWindow: false,
+      mediaWindow: 'undefined',
       searching: false,
       folder: false,
-      day: 1,
-      month: 1,
-      year: 2000,
+      day: 15,
+      month: 6,
+      year: 2015,
       cloud: false,
       lockNumber: null,
       bateria: '/icones/bateria.svg',
@@ -199,6 +202,12 @@ export default {
     }
   },
   mounted () {
+    this.$axios.get('http://duality.web.ua.pt/backend/').then((response) => {
+      this.media = response.data
+      console.log(this.media)
+    }).catch((error) => {
+      alert(error)
+    })
     this.cloud = true
     setTimeout(() => { this.cloud = false }, 2500)
     setTimeout(() => { this.chamadas = '/icones/chamadas.svg' }, 12000)
