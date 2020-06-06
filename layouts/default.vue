@@ -18,7 +18,7 @@
       </div>
     </div>
     <div v-if="trailer === true" class="absolute z-20 w-full h-full bg-black" @keyup.enter="handleEnter">
-      <video ref="video" class="h-full w-full" autoplay="true">
+      <video @ended="endTrailer" ref="video" class="h-full w-full" autoplay="true">
         <source :src="intro" type="video/mp4">
         Your browser does not support the video tag.
       </video>
@@ -66,6 +66,9 @@ export default {
     playController () {
       this.trailer = true
       this.play = false
+    },
+    endTrailer () {
+      this.trailer = false
     }
   }
 }

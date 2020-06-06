@@ -4,7 +4,7 @@
       <div class="bg-gray-transparent-60 text-white py-4 rounded-r-xl w-full">
         <img class="ml-5 py-3 w-8 menu-icon" src="/icones/browser.svg" alt="browser">
         <img class="ml-5 py-3 w-8 menu-icon" src="/icones/noticias.svg" alt="noticias" @click="systemWindow = true, window = ''">
-        <img class="ml-5 py-3 w-8 menu-icon" src="/icones/fotos.svg" alt="fotos" @click="systemWindow = true, window = ''">
+        <img class="ml-5 py-3 w-8 menu-icon" src="/icones/fotos.svg" alt="fotos" @click="systemWindow = true, window = 'gallery'">
         <img class="ml-5 py-3 w-8 menu-icon" :src="reciclagem" alt="reciclagem" @click="systemWindow = true, window = ''">
         <img class="ml-5 py-3 w-8 menu-icon" :src="mail" alt="email" @click="systemWindow = true, window = ''">
         <img class="ml-5 py-3 w-8 menu-icon" :src="chamadas" alt="chamadas" @click.prevent="skypeController">
@@ -73,6 +73,11 @@
           </div>
           <div v-else class="bg-gray-600 h-full w-full rounded-br-lg p-2 skype-video" style="background-image: url('/images/placeholder-1.png')" />
         </div>
+        <div v-if="window === 'gallery'" class="w-full">
+          <div v-for="(img, key) in arrayGaleria" :key="key" class="inline-block">
+            <img class="w-24 p-3 object-contain" :class="{ 'image-locked' : img.locked }" :src="img.url" :alt="img.alt" style="max-height: 5rem">
+          </div>
+        </div>
       </div>
     </transition>
     <transition name="slide-fade">
@@ -92,7 +97,7 @@
             allowfullscreen
           />
         </div>
-        <div v-if="mediaWindow.type === 'image'" class="w-full h-full">
+        <div v-if="mediaWindow.type === 'image' || mediaWindow.type === 'image-art'" class="w-full h-full">
           <img class="mx-auto h-full" :src="mediaWindow.url">
         </div>
       </div>
@@ -117,15 +122,23 @@
       </div>
     </transition>
     <transition name="slide-fade">
-      <div v-if="day == 28 && month == 5 && year == 2019" class="absolute py-20 h-full w-full">
+      <div v-if="dateFolder" class="absolute py-20 h-full w-full">
         <div class="folder">
-          <div class="font-bold mr-4 mt-4 h-5 w-5 text-white bg-white hover:text-black cursor-pointer rounded-full text-center float-right" @click="resetDate">
-            X
+          <div class="h-8 bg-gray-900 w-full p-2 rounded-t-lg text-xs pl-3 text-white">
+            C:/Users/Luciano/Images/Albums/{{ moment }}
+            <div class="font-bold h-4 w-4 text-xs text-yellow-500 bg-yellow-500 hover:text-black cursor-pointer rounded-full text-center float-right" @click="dateFolder = false">
+              X
+            </div>
           </div>
-          <div class="w-full min-h-full date-folder pt-12 pl-10">
+          <div class="w-full min-h-full date-folder pt-10 pl-10">
             <div class="w-8/12">
               <div class="inline-block px-2" v-for="(item, key) in media" :key="key">
-                <div class="inline-block cursor-pointer image-file" v-if="item.type === 'image'" @click="mediaWindow = item" />
+                <div v-if="item.data === moment">
+                    <div v-if="item.type === 'image' || item.type === 'image-art'" class="inline-block cursor-pointer image-file" @click="mediaWindow = item" />
+                    <div class="inline-block cursor-pointer video-file" v-if="item.type === 'video'" @click="mediaWindow = item" />
+                    <div class="inline-block cursor-pointer audio-file" v-if="item.type === 'audio'" @click="mediaWindow = item" />
+                    <div class="inline-block cursor-pointer doc-file" v-if="item.type === 'doc'" @click="mediaWindow = item" />
+                </div>
               </div>
             </div>
           </div>
@@ -175,11 +188,13 @@ export default {
       media: {},
       systemWindow: false,
       mediaWindow: 'undefined',
+      dateFolder: false,
       searching: false,
       folder: false,
-      day: 15,
-      month: 6,
-      year: 2015,
+      moment: '2018-04-23',
+      day: 23,
+      month: 4,
+      year: 2018,
       cloud: false,
       lockNumber: null,
       bateria: '/icones/bateria.svg',
@@ -187,6 +202,7 @@ export default {
       reciclagem: '/icones/reciclagem.svg',
       mail: '/icones/email.svg',
       window: '',
+      arrayGaleria: [],
       unlocked: false,
       contacting: false,
       skypeVideo: "background-image: url('/images/placeholder-1.png')"
@@ -199,12 +215,31 @@ export default {
       } else {
         this.unlocked = false
       }
+    },
+    moment () {
+      const a = this.media.some(item => item.data === this.moment)
+      if (a) {
+        this.dateFolder = true
+      } else {
+        this.dateFolder = false
+      }
+      for (const i in this.arrayGaleria) {
+        if (this.arrayGaleria[i].data === this.moment) {
+          this.arrayGaleria[i].locked = false
+        }
+      }
     }
   },
   mounted () {
     this.$axios.get('http://duality.web.ua.pt/backend/').then((response) => {
       this.media = response.data
-      console.log(this.media)
+      for (const i in this.media) {
+        if (this.media[i].type === 'image-art') {
+          const a = this.media[i]
+          a.locked = true
+          this.arrayGaleria.push(a)
+        }
+      }
     }).catch((error) => {
       alert(error)
     })
@@ -218,31 +253,71 @@ export default {
     incrementDay () {
       if (this.day < 31) {
         this.day = this.day + 1
+        const a = this.moment.split('-')
+        let b = ''
+        if (this.day < 10) {
+          b = a[0] + '-' + a[1] + '-0' + this.day
+        } else {
+          b = a[0] + '-' + a[1] + '-' + this.day
+        }
+        this.moment = b
       }
     },
     decreaseDay () {
       if (this.day > 1) {
         this.day = this.day - 1
+        const a = this.moment.split('-')
+        let b = ''
+        if (this.day < 10) {
+          b = a[0] + '-' + a[1] + '-0' + this.day
+        } else {
+          b = a[0] + '-' + a[1] + '-' + this.day
+        }
+        this.moment = b
       }
     },
     incrementMonth () {
       if (this.month < 12) {
         this.month = this.month + 1
+        const a = this.moment.split('-')
+        let b = ''
+        if (this.month < 10) {
+          b = a[0] + '-0' + this.month + '-' + a[2]
+        } else {
+          b = a[0] + '-' + this.month + '-' + a[2]
+        }
+        this.moment = b
       }
     },
     decreaseMonth () {
       if (this.month > 1) {
         this.month = this.month - 1
+        const a = this.moment.split('-')
+        let b = ''
+        if (this.month < 10) {
+          b = a[0] + '-0' + this.month + '-' + a[2]
+        } else {
+          b = a[0] + '-' + this.month + '-' + a[2]
+        }
+        this.moment = b
       }
     },
     incrementYear () {
       if (this.year < 2020) {
         this.year = this.year + 1
+        const a = this.moment.split('-')
+        let b = ''
+        b = this.year + '-' + a[1] + '-' + a[2]
+        this.moment = b
       }
     },
     decreaseYear () {
       if (this.year > 1980) {
         this.year = this.year - 1
+        const a = this.moment.split('-')
+        let b = ''
+        b = this.year + '-' + a[1] + '-' + a[2]
+        this.moment = b
       }
     },
     resetDate () {
@@ -351,7 +426,7 @@ export default {
 }
 .folder {
   width: 25rem;
-  height: 28rem;
+  height: 24rem;
   float: right;
   margin-right: 25rem;
 }
@@ -365,7 +440,7 @@ export default {
 
 .date-folder {
     background-color: rgba(255, 255, 255, 0.4);
-    border-radius: 1rem;
+    border-radius: 0rem 0rem 1rem 1rem;
 }
 
 .video-file, .image-file,
@@ -402,7 +477,7 @@ export default {
 .system-window {
   width: 32%;
   height: 60%;
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(150, 150, 150, 0.8);
   margin: 9% 0% 0% 7%;
   position: absolute;
   z-index: 10;
@@ -426,10 +501,12 @@ export default {
   background-size: cover;
   background-position: center center;
 }
-
+.image-locked{
+  filter: blur(0.5rem);
+}
 .video-window {
-  width: 50%;
-  height: 50%;
+  width: 45%;
+  height: 70%;
   background-color: rgba(0, 0, 0, 0.7);
   margin: 5% 0% 0% 20%;
   position: absolute;
