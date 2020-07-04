@@ -17,7 +17,7 @@ export default {
 <style lang="css" scoped>
 .desktop {
   height: calc(100vh - 2.75rem);
-  background-image: url('/images/dark-wallpaper.jpg');
+  background-image: url('/images/dark-wallpaper.png');
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
